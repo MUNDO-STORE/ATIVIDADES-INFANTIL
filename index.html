@@ -4,409 +4,220 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Kids - Atividades Infantis Educacionais</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f0f9ff;
-            color: #333;
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        /* Fundo animado */
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .floating-shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 20s infinite linear;
-            display: block; /* Garante que o link ocupe o espaço da forma */
-            transition: opacity 0.3s;
+        *{margin:0;padding:0;box-sizing:border-box}
+
+        body{
+            font-family:'Nunito',sans-serif;
+            background:#f0f9ff;
+            color:#333;
+            overflow-x:hidden;
         }
 
-        .floating-shape:hover {
-            opacity: 0.6;
+        .container{
+            max-width:1200px;
+            margin:auto;
+            padding:20px;
         }
-        
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-1000px) rotate(720deg); }
+
+        header{
+            text-align:center;
+            padding:30px 0;
         }
-        
-        .shape-1 { width: 100px; height: 100px; background-color: #ff9e9e; top: 10%; left: 5%; animation-duration: 25s; }
-        .shape-2 { width: 150px; height: 150px; background-color: #9ecbff; top: 60%; left: 80%; animation-duration: 30s; }
-        .shape-3 { width: 80px; height: 80px; background-color: #ffdd9e; top: 80%; left: 15%; animation-duration: 20s; }
-        .shape-4 { width: 120px; height: 120px; background-color: #a9ff9e; top: 20%; left: 70%; animation-duration: 35s; }
-        .shape-5 { width: 60px; height: 60px; background-color: #d19eff; top: 40%; left: 85%; animation-duration: 22s; }
-        .shape-6 { width: 90px; height: 90px; background-color: #9efff8; top: 70%; left: 40%; animation-duration: 28s; }
-        
-        /* Container principal */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+
+        .logo{
+            font-family:'Comic Neue',cursive;
+            font-size:3.5rem;
+            color:#ff6b8b;
+            text-shadow:3px 3px 0 #ffdd59;
         }
-        
-        /* Header */
-        header {
-            text-align: center;
-            padding: 30px 0;
+
+        .subtitle{
+            font-size:1.8rem;
+            font-weight:700;
+            color:#3d5af1;
+            margin:10px 0 20px;
         }
-        
-        .logo {
-            font-family: 'Comic Neue', cursive;
-            font-size: 3.5rem;
-            color: #ff6b8b;
-            text-shadow: 3px 3px 0 #ffdd59;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+
+        .price-badge{
+            display:inline-block;
+            background:linear-gradient(45deg,#ff9a00,#ff5e62);
+            color:#fff;
+            font-size:2.2rem;
+            font-weight:900;
+            padding:12px 30px;
+            border-radius:50px;
+            animation:pulse 2s infinite;
         }
-        
-        .subtitle {
-            font-size: 1.8rem;
-            color: #3d5af1;
-            font-weight: 700;
-            margin-bottom: 20px;
+
+        @keyframes pulse{
+            0%,100%{transform:scale(1)}
+            50%{transform:scale(1.05)}
         }
-        
-        .price-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff9a00, #ff5e62);
-            color: white;
-            font-size: 2.2rem;
-            font-weight: 900;
-            padding: 12px 30px;
-            border-radius: 50px;
-            box-shadow: 0 10px 20px rgba(255, 94, 98, 0.3);
-            margin-bottom: 30px;
-            animation: pulse 2s infinite;
+
+        .main-content{
+            display:flex;
+            flex-wrap:wrap;
+            gap:40px;
+            margin:50px 0;
+            align-items:center;
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .product-image{
+            flex:1;
+            text-align:center;
         }
-        
-        /* Conteúdo principal */
-        .main-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-bottom: 50px;
+
+        .product-image img{
+            max-width:100%;
+            max-height:520px;
+            border-radius:20px;
+            box-shadow:0 15px 30px rgba(0,0,0,.2);
         }
-        
-        .product-image {
-            flex: 1;
-            min-width: 300px;
-            text-align: center;
+
+        .product-info{
+            flex:1;
         }
-        
-        .product-image img {
-            max-width: 100%;
-            max-height: 500px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            object-fit: contain;
+
+        .features{
+            background:#fff;
+            border-radius:20px;
+            padding:30px;
+            box-shadow:0 10px 30px rgba(0,0,0,.05);
         }
-        
-        .product-info {
-            flex: 1;
-            min-width: 300px;
+
+        .features h2{
+            color:#3d5af1;
+            margin-bottom:20px;
+            border-bottom:3px solid #ffdd59;
+            display:inline-block;
         }
-        
-        .features {
-            background-color: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+
+        .feature-list{
+            list-style:none;
         }
-        
-        .features h2 {
-            color: #3d5af1;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            border-bottom: 3px solid #ffdd59;
-            padding-bottom: 10px;
-            display: inline-block;
+
+        .feature-list li{
+            padding:12px 0 12px 35px;
+            border-bottom:1px dashed #ddd;
+            position:relative;
+            font-size:1.1rem;
         }
-        
-        .feature-list {
-            list-style-type: none;
+
+        .feature-list li i{
+            position:absolute;
+            left:0;
+            top:14px;
+            color:#ff6b8b;
         }
-        
-        .feature-list li {
-            padding: 12px 0;
-            border-bottom: 1px dashed #e0e0e0;
-            font-size: 1.1rem;
-            position: relative;
-            padding-left: 35px;
+
+        .tdah-section{
+            margin-top:30px;
+            background:linear-gradient(135deg,#a9ff9e,#9efff8);
+            padding:30px;
+            border-radius:20px;
+            text-align:center;
         }
-        
-        .feature-list li:last-child {
-            border-bottom: none;
+
+        .tdah-section h2{
+            color:#2e7d32;
+            margin-bottom:10px;
         }
-        
-        .feature-list li i {
-            position: absolute;
-            left: 0;
-            top: 14px;
-            color: #ff6b8b;
-            font-size: 1.2rem;
+
+        .purchase-section{
+            text-align:center;
+            padding:40px 0;
         }
-        
-        /* Botão de compra */
-        .purchase-section {
-            text-align: center;
-            padding: 30px 0;
+
+        .purchase-button{
+            display:inline-block;
+            background:linear-gradient(45deg,#3d5af1,#6a11cb);
+            color:#fff;
+            font-size:1.8rem;
+            font-weight:900;
+            padding:20px 50px;
+            border-radius:60px;
+            text-decoration:none;
+            animation:bounce 2s infinite;
         }
-        
-        .purchase-button {
-            display: inline-block;
-            background: linear-gradient(45deg, #3d5af1, #6a11cb);
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 900;
-            text-decoration: none;
-            padding: 20px 50px;
-            border-radius: 60px;
-            box-shadow: 0 15px 30px rgba(61, 90, 241, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            animation: bounce 2s infinite;
+
+        @keyframes bounce{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-10px)}
         }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+        footer{
+            text-align:center;
+            padding:30px 0;
+            color:#666;
+            border-top:1px solid #ddd;
         }
-        
-        .purchase-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 40px rgba(61, 90, 241, 0.4);
-        }
-        
-        .purchase-button:active {
-            transform: scale(0.98);
-        }
-        
-        .purchase-button i {
-            margin-right: 15px;
-            animation: spin 3s infinite linear;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .button-text {
-            font-size: 1.8rem;
-        }
-        
-        .guarantee {
-            margin-top: 20px;
-            font-size: 1.1rem;
-            color: #666;
-            font-weight: 700;
-        }
-        
-        .guarantee i {
-            color: #00c851;
-            margin-right: 8px;
-        }
-        
-        /* Seção TDAH */
-        .tdah-section {
-            background: linear-gradient(135deg, #a9ff9e, #9efff8);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 40px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-        
-        .tdah-section h2 {
-            color: #2e7d32;
-            margin-bottom: 15px;
-            font-size: 2rem;
-        }
-        
-        .tdah-section p {
-            font-size: 1.2rem;
-            color: #1b5e20;
-            font-weight: 700;
-        }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            color: #666;
-            border-top: 1px solid #e0e0e0;
-            margin-top: 30px;
-        }
-        
-        footer p {
-            margin: 10px 0;
-        }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .logo { font-size: 2.5rem; }
-            .subtitle { font-size: 1.4rem; }
-            .price-badge { font-size: 1.8rem; padding: 10px 20px; }
-            .purchase-button { font-size: 1.5rem; padding: 15px 30px; }
-            .button-text { font-size: 1.5rem; }
-            .features h2 { font-size: 1.5rem; }
-            .feature-list li { font-size: 1rem; }
-        }
-        
-        @media (max-width: 480px) {
-            .logo { font-size: 2rem; }
-            .price-badge { font-size: 1.5rem; }
-            .purchase-button { font-size: 1.2rem; padding: 12px 25px; }
-            .button-text { font-size: 1.2rem; }
-            .container { padding: 15px; }
+
+        @media(max-width:768px){
+            .logo{font-size:2.5rem}
+            .price-badge{font-size:1.8rem}
+            .purchase-button{font-size:1.4rem;padding:15px 30px}
         }
     </style>
 </head>
+
 <body>
-    <div class="background-animation">
-        <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" target="_blank" class="floating-shape shape-1"></a>
-        <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" target="_blank" class="floating-shape shape-2"></a>
-        <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" target="_blank" class="floating-shape shape-3"></a>
-        <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" target="_blank" class="floating-shape shape-4"></a>
-        <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" target="_blank" class="floating-shape shape-5"></a>
-        <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" target="_blank" class="floating-shape shape-6"></a>
+
+<div class="container">
+
+<header>
+    <h1 class="logo">SUPER KIDS</h1>
+    <div class="subtitle">ATIVIDADES INFANTIS EDUCACIONAIS</div>
+    <div class="price-badge">APENAS R$20,00</div>
+</header>
+
+<section class="main-content">
+
+    <div class="product-image">
+        <!-- IMAGEM CORRETA -->
+        <img src="KIDS.png" alt="Super Kids - Atividades Infantis">
     </div>
-    
-    <div class="container">
-        <header>
-            <h1 class="logo">SUPER KIDS</h1>
-            <div class="subtitle">ATIVIDADES INFANTIS EDUCACIONAIS</div>
-            <div class="price-badge">APENAS R$20,00</div>
-        </header>
-        
-        <section class="main-content">
-            <div class="product-image">
-                <img src="kids.png" alt="Super Kids - Atividades Infantis">
-            </div>
-            
-            <div class="product-info">
-                <div class="features">
-                    <h2>O QUE VOCÊ VAI RECEBER:</h2>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> <strong>Atividades infantis para imprimir</strong> para idade de 3 a 12 anos</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Atividades especiais para crianças com TDAH</strong></li>
-                        <li><i class="fas fa-check-circle"></i> Uso para <strong>professores</strong> e <strong>particular</strong>!</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Pack profissional de músicas infantis</strong></li>
-                        <li><i class="fas fa-check-circle"></i> <strong>100% do material hospedado no Telegram</strong> para baixar quando quiser!</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Atualizações constantes</strong> - tudo de novo que conseguimos jogamos no grupo</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Pagamento único</strong> - acesso vitalício por apenas R$20,00</li>
-                    </ul>
-                </div>
-                
-                <div class="tdah-section">
-                    <h2><i class="fas fa-brain"></i> ATIVIDADES ESPECIAIS PARA TDAH</h2>
-                    <p>Material desenvolvido com técnicas específicas para crianças com TDAH, focando em concentração, organização e aprendizado lúdico!</p>
-                </div>
-            </div>
-        </section>
-        
-        <section class="purchase-section">
-            <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672" class="purchase-button" target="_blank">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="button-text">CLIQUE AQUI PARA COMPRAR AGORA - R$20,00</span>
-            </a>
-            <p class="guarantee"><i class="fas fa-shield-alt"></i> Acesso imediato após a confirmação do pagamento</p>
-        </section>
-        
-        <footer>
-            <p><strong>Super Kids - Atividades Infantis Educacionais</strong></p>
-            <p>Material 100% digital - Entrega imediata via Telegram</p>
-            <p>Super Kids. Todos os direitos reservados.</p>
-        </footer>
+
+    <div class="product-info">
+
+        <div class="features">
+            <h2>O QUE VOCÊ VAI RECEBER</h2>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Atividades infantis para imprimir (3 a 12 anos)</li>
+                <li><i class="fas fa-check-circle"></i> Material especial para crianças com TDAH</li>
+                <li><i class="fas fa-check-circle"></i> Uso para professoras e mães</li>
+                <li><i class="fas fa-check-circle"></i> Pack de músicas infantis</li>
+                <li><i class="fas fa-check-circle"></i> 100% hospedado no Telegram</li>
+                <li><i class="fas fa-check-circle"></i> Atualizações constantes</li>
+                <li><i class="fas fa-check-circle"></i> Pagamento único</li>
+            </ul>
+        </div>
+
+        <div class="tdah-section">
+            <h2>🧠 Atividades Especiais para TDAH</h2>
+            <p>Conteúdo lúdico focado em atenção, foco e aprendizado</p>
+        </div>
+
     </div>
-    
-    <script>
-        // Adicionando interatividade ao botão
-        document.querySelector('.purchase-button').addEventListener('mouseenter', function() {
-            this.style.animation = 'none';
-        });
-        
-        document.querySelector('.purchase-button').addEventListener('mouseleave', function() {
-            this.style.animation = 'bounce 2s infinite';
-        });
-        
-        // Adicionando efeito de confete ao clicar no botão
-        document.querySelector('.purchase-button').addEventListener('click', function(e) {
-            for(let i = 0; i < 50; i++) {
-                createConfetti(e.clientX, e.clientY);
-            }
-        });
-        
-        function createConfetti(x, y) {
-            const colors = ['#ff6b8b', '#3d5af1', '#ffdd59', '#a9ff9e', '#9ecbff'];
-            const confetti = document.createElement('div');
-            confetti.style.position = 'fixed';
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.borderRadius = '50%';
-            confetti.style.left = x + 'px';
-            confetti.style.top = y + 'px';
-            confetti.style.zIndex = '1000';
-            confetti.style.pointerEvents = 'none';
-            
-            document.body.appendChild(confetti);
-            
-            const angle = Math.random() * Math.PI * 2;
-            const velocity = 3 + Math.random() * 3;
-            const vx = Math.cos(angle) * velocity;
-            const vy = Math.sin(angle) * velocity;
-            const gravity = 0.1;
-            
-            let posX = x;
-            let posY = y;
-            let speedY = vy;
-            
-            function animate() {
-                posX += vx;
-                posY += speedY;
-                speedY += gravity;
-                
-                confetti.style.left = posX + 'px';
-                confetti.style.top = posY + 'px';
-                confetti.style.opacity = 1 - (posY / window.innerHeight);
-                
-                if(posY < window.innerHeight) {
-                    requestAnimationFrame(animate);
-                } else {
-                    document.body.removeChild(confetti);
-                }
-            }
-            animate();
-        }
-    </script>
+</section>
+
+<section class="purchase-section">
+    <a href="https://mundodj.erby.site/product/1759498128619607454452289916057672"
+       class="purchase-button" target="_blank">
+        🛒 COMPRAR AGORA – R$20,00
+    </a>
+</section>
+
+<footer>
+    <p><strong>Super Kids</strong> – Atividades Infantis Educacionais</p>
+    <p>Material digital • Entrega imediata via Telegram</p>
+</footer>
+
+</div>
+
 </body>
 </html>
