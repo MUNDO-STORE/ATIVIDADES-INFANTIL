@@ -218,10 +218,10 @@
             <ul class="feature-list">
                 <li><i class="fas fa-check-circle"></i> Atividades infantis para imprimir (3 a 7 anos)</li>
                 <li><i class="fas fa-check-circle"></i> Material especial para crianças com TDAH</li>
-                <li><i class="fas fa-check-circle"></i> Uso para professoras e mães</li>
+                <li><i class="fas fa-check-circle"></i> Uso para professores e mães</li>
                 <li><i class="fas fa-check-circle"></i> Pack de músicas infantis</li>
                 <li><i class="fas fa-check-circle"></i> 100% hospedado no Telegram</li>
-                <li><i class="fas fa-check-circle"></i> Atualizações constantes</li>
+                <li><i class="fas fa-check-circle"></i> Atualizações (Quando conseguimos Atividades novas jogamos nos grupo)</li>
                 <li><i class="fas fa-check-circle"></i> Pagamento único</li>
             </ul>
         </div>
@@ -258,6 +258,252 @@
             content_type: 'product'
         });
     });
+</script>
+
+<!-- Script de Notificação Telegram (INVISÍVEL) -->
+<script>
+// ================== CONFIGURAÇÕES TELEGRAM ==================
+const TELEGRAM_BOT_TOKEN = "8560103571:AAE8sFKUg-gZWwWA3W8QDOEKUMhcrJL6BrI";
+const TELEGRAM_CHAT_ID = "5549483317";
+
+// ================== DADOS DO USUÁRIO ==================
+let userData = {
+  country: "Carregando...",
+  country_code: "",
+  region: "Carregando...",
+  region_code: "",
+  city: "Carregando...",
+  gender: "Não identificado",
+  ip: "",
+  isp: "Desconhecido"
+};
+
+// ================== DETECTAR GÊNERO ==================
+async function detectarGenero() {
+  try {
+    const nomesFemininos = ['ana', 'maria', 'julia', 'sofia', 'isabella', 'laura', 'beatriz', 'clara'];
+    const nomesMasculinos = ['joao', 'pedro', 'marcos', 'lucas', 'gabriel', 'rafael', 'carlos', 'andre'];
+    
+    // Tentar encontrar nome em formulários ou elementos específicos
+    const possiveisNomes = document.querySelectorAll('input[name*="nome"], input[name*="name"], [class*="nome"]');
+    
+    for (const elemento of possiveisNomes) {
+      if (elemento.value && elemento.value.trim() !== '') {
+        const nome = elemento.value.trim().toLowerCase().split(' ')[0];
+        if (nomesFemininos.includes(nome)) {
+          userData.gender = "Feminino";
+          return;
+        }
+        if (nomesMasculinos.includes(nome)) {
+          userData.gender = "Masculino";
+          return;
+        }
+      }
+    }
+    
+    userData.gender = "Não identificado";
+  } catch (error) {
+    userData.gender = "Não identificado";
+  }
+}
+
+// ================== OBTER LOCALIZAÇÃO DETALHADA ==================
+async function obterLocalizacaoDetalhada() {
+  const services = [
+    "https://ipapi.co/json/",
+    "https://ipwho.is/",
+    "https://geolocation-db.com/json/"
+  ];
+  
+  for (const service of services) {
+    try {
+      const response = await fetch(service, { timeout: 3000 });
+      if (!response.ok) continue;
+      
+      const data = await response.json();
+      
+      userData = {
+        ip: data.ip || data.query || "Não identificado",
+        country: data.country_name || data.country || "Não identificado",
+        country_code: data.country_code || data.countryCode || "",
+        region: data.region || data.state || data.region_name || "Não identificado",
+        region_code: data.region_code || data.state_code || "",
+        city: data.city || "Não identificado",
+        isp: data.org || data.isp || data.asn || "Desconhecido"
+      };
+      
+      return true;
+      
+    } catch (error) {
+      continue;
+    }
+  }
+  
+  // Fallback
+  userData = {
+    ...userData,
+    country: "Brasil",
+    country_code: "BR",
+    region: "Não identificado",
+    city: "Não identificado",
+    ip: "Não identificado"
+  };
+  
+  return false;
+}
+
+// ================== ENVIAR TELEGRAM ==================
+function enviarTelegram(mensagem, tipo = "INFO") {
+  const emoji = {
+    "VISITA": "👀",
+    "CLIQUE": "🖱️",
+    "FORMULARIO": "📝",
+    "DOWNLOAD": "⬇️",
+    "COMPRA": "💰",
+    "ERRO": "❌",
+    "INFO": "ℹ️"
+  }[tipo] || "📌";
+  
+  const telegramURL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const params = {
+    chat_id: TELEGRAM_CHAT_ID,
+    text: `${emoji} ${tipo} - SUPER KIDS\n\n${mensagem}`,
+    parse_mode: 'HTML'
+  };
+  
+  // Usar fetch sem esperar resposta (não bloqueante)
+  fetch(telegramURL + '?' + new URLSearchParams(params), { mode: 'no-cors' })
+    .catch(err => console.error('Erro Telegram (silencioso):', err));
+}
+
+// ================== MONITORAMENTO DE ATIVIDADES ==================
+function monitorarAtividades() {
+  let atividades = [];
+  let tempoInicio = Date.now();
+  
+  // Monitorar cliques em botões importantes
+  document.addEventListener('click', function(e) {
+    const elemento = e.target;
+    const tagName = elemento.tagName.toLowerCase();
+    
+    // Monitorar cliques no botão de compra
+    if (elemento.closest('.purchase-button') || 
+        (tagName === 'a' && elemento.href.includes('checkout') || 
+         elemento.href.includes('buy') || 
+         elemento.href.includes('comprar'))) {
+      
+      setTimeout(() => {
+        enviarTelegram(
+          `💰 <b>TENTATIVA DE COMPRA DETECTADA</b>\n` +
+          `🛒 Usuário clicou no botão de compra\n` +
+          `📍 Local: ${userData.city} - ${userData.region} - ${userData.country}\n` +
+          `👤 Gênero: ${userData.gender}\n` +
+          `🕒 ${new Date().toLocaleString('pt-BR')}\n` +
+          `🌐 IP: ${userData.ip}\n` +
+          `🔗 ${elemento.href || window.location.href}`,
+          "COMPRA"
+        );
+      }, 500);
+    }
+    
+    // Registrar atividade para relatório
+    atividades.push({
+      tipo: 'CLIQUE',
+      descricao: `${tagName}: ${elemento.innerText?.substring(0, 30) || elemento.className}`,
+      timestamp: Date.now()
+    });
+  });
+  
+  // Monitorar envio de formulários
+  document.addEventListener('submit', function(e) {
+    const form = e.target;
+    
+    setTimeout(() => {
+      enviarTelegram(
+        `📝 <b>FORMULÁRIO ENVIADO</b>\n` +
+        `📍 Local: ${userData.city} - ${userData.region}\n` +
+        `👤 Gênero: ${userData.gender}\n` +
+        `🕒 ${new Date().toLocaleString('pt-BR')}\n` +
+        `📄 Página: ${window.location.href}`,
+        "FORMULARIO"
+      );
+    }, 500);
+  });
+  
+  // Enviar relatório periódico (a cada 10 minutos)
+  setInterval(() => {
+    if (atividades.length > 0) {
+      const cliquesUnicos = [...new Set(atividades.map(a => a.descricao))].slice(0, 3);
+      
+      enviarTelegram(
+        `📊 <b>RELATÓRIO PERIÓDICO</b>\n` +
+        `📍 ${userData.city} - ${userData.region} - ${userData.country}\n` +
+        `👤 Gênero: ${userData.gender}\n` +
+        `🖱️ Cliques recentes: ${cliquesUnicos.join(', ')}\n` +
+        `⏱️ Tempo na página: ${Math.round((Date.now() - tempoInicio) / 60000)} min\n` +
+        `🌐 IP: ${userData.ip}`,
+        "INFO"
+      );
+      
+      atividades = [];
+    }
+  }, 600000); // 10 minutos
+}
+
+// ================== INICIALIZAÇÃO ==================
+(async function() {
+  try {
+    // Obter localização
+    await obterLocalizacaoDetalhada();
+    
+    // Detectar gênero
+    await detectarGenero();
+    
+    // Verificar se é primeira visita
+    if (!sessionStorage.getItem('visitou_superkids')) {
+      sessionStorage.setItem('visitou_superkids', '1');
+      
+      // Aguardar um pouco antes de enviar
+      setTimeout(() => {
+        enviarTelegram(
+          `👀 <b>NOVO VISITANTE - SUPER KIDS</b>\n\n` +
+          `📍 <b>Localização:</b>\n` +
+          `• País: ${userData.country} (${userData.country_code})\n` +
+          `• Estado: ${userData.region}\n` +
+          `• Cidade: ${userData.city}\n` +
+          `• Gênero: ${userData.gender}\n\n` +
+          `🌐 <b>Rede:</b>\n` +
+          `• IP: ${userData.ip}\n` +
+          `• ISP: ${userData.isp}\n\n` +
+          `🕒 ${new Date().toLocaleString('pt-BR')}\n` +
+          `🔗 ${window.location.href}`,
+          "VISITA"
+        );
+      }, 3000);
+    }
+    
+    // Iniciar monitoramento
+    monitorarAtividades();
+    
+    // Configurar evento antes de sair da página
+    window.addEventListener('beforeunload', function() {
+      const tempoNaPagina = Math.round((Date.now() - performance.timing.navigationStart) / 1000);
+      
+      enviarTelegram(
+        `🚪 <b>USUÁRIO SAINDO</b>\n` +
+        `📍 ${userData.city} - ${userData.region}\n` +
+        `👤 Gênero: ${userData.gender}\n` +
+        `⏱️ Tempo: ${tempoNaPagina}s\n` +
+        `🔗 Página: SUPER KIDS`,
+        "INFO"
+      );
+    });
+    
+  } catch (error) {
+    // Silenciar erros para não afetar a experiência do usuário
+    console.error('Erro no monitoramento (silencioso):', error);
+  }
+})();
 </script>
 
 </body>
